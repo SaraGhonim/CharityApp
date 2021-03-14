@@ -1,11 +1,16 @@
 import React from 'react';
 import {Div, Text} from 'react-native-magnus';
-import {Button,StatusBar, TouchableOpacity, useWindowDimensions} from 'react-native';
- import {colorPalette} from '../../utils/theme';
+import {
+  Button,
+  StatusBar,
+  TouchableOpacity,
+  useWindowDimensions,
+} from 'react-native';
+import {colorPalette} from '../../utils/theme';
 // import {AppText} from '../../../AppText';
 import {human, material, systemWeights} from 'react-native-typography';
 
- const Moderators = () => {
+const Moderators = () => {
   const listTitleStyle = {...material.headlineObject, ...systemWeights.bold};
 
   const {width, height} = useWindowDimensions();
@@ -15,8 +20,7 @@ import {human, material, systemWeights} from 'react-native-typography';
       flex={1}
       // justifyContent="center"
       alignItems="center">
-
-<StatusBar backgroundColor="#fff" barStyle="dark-content" />
+      <StatusBar backgroundColor="#fff" barStyle="dark-content" />
 
       <Text
         color={colorPalette.primaryDark}
@@ -31,11 +35,8 @@ import {human, material, systemWeights} from 'react-native-typography';
         style={{fontWeight: 'bold', fontSize: 15, marginBottom: 4 ,color:colorPalette.secondaryDark}}>
          We Try to make things easier for you
       </AppText> */}
-
-    
-     
     </Div>
   );
 };
 
-export default Moderators
+export default Moderators;

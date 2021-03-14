@@ -29,6 +29,7 @@
     "react-native-magnus": "^1.0.62",
     "react-native-modal": "^11.7.0",
     "react-native-offline": "^5.8.0",
+    "react-native-paper": "^4.7.2",
     "react-native-reanimated": "^2.0.0",
     "react-native-safe-area-context": "^3.1.9",
     "react-native-screens": "^2.18.1",
@@ -36,6 +37,7 @@
     "react-native-vector-icons": "^8.1.0",
     "react-sweet-state": "^2.5.2",
     "validate-color": "^2.1.1",
+    "yarn": "^1.22.10",
     "yup": "^0.32.9"
   },
   "devDependencies": {
