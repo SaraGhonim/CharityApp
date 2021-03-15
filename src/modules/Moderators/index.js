@@ -1,41 +1,19 @@
 import React from 'react';
-import {Div, Text} from 'react-native-magnus';
-import {Button,StatusBar, TouchableOpacity, useWindowDimensions} from 'react-native';
- import {colorPalette} from '../../utils/theme';
-// import {AppText} from '../../../AppText';
-import {human, material, systemWeights} from 'react-native-typography';
-
- const Moderators = () => {
-  const listTitleStyle = {...material.headlineObject, ...systemWeights.bold};
-
-  const {width, height} = useWindowDimensions();
+import {Div, Text, Input, Icon} from 'react-native-magnus';
+import Moderators from './navigation/index';
+const Index = () => {
   return (
-    <Div
-      bg={colorPalette.surfaceColor}
-      flex={1}
-      // justifyContent="center"
-      alignItems="center">
-
-<StatusBar backgroundColor="#fff" barStyle="dark-content" />
-
-      <Text
-        color={colorPalette.primaryDark}
-        fontSize={30}
-        letterSpacing={1}
-        fontWeight="bold">
-        Welcome
-      </Text>
-
-      {/* <AppText
-        textStyle={[listTitleStyle]}
-        style={{fontWeight: 'bold', fontSize: 15, marginBottom: 4 ,color:colorPalette.secondaryDark}}>
-         We Try to make things easier for you
-      </AppText> */}
-
-    
-     
+    <Div flex={1}>
+      <Div flex={1} justifyContent="center" px="sm">
+        <Text fontWeight="700" fontSize="2xl">
+          Moderators
+        </Text>
+      </Div>
+      <Div flex={7}>
+        <Moderators />
+      </Div>
     </Div>
   );
 };
 
-export default Moderators
+export default Index;

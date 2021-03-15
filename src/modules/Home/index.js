@@ -24,17 +24,16 @@ const Home = ({navigation}) => {
       }}>
       <StatusBar backgroundColor="#fff" barStyle="dark-content" />
 
-    
       <TouchableOpacity onPress={() => navigation.toggleDrawer()}>
-              <Icon
-                name="menu"
-                color="secondary"
-                fontFamily="Feather"
-                // position="absolute"
-                size={10}
-                fontSize={20}
-              />
-            </TouchableOpacity>
+        <Icon
+          name="menu"
+          color="secondary"
+          fontFamily="Feather"
+          // position="absolute"
+          size={10}
+          fontSize={20}
+        />
+      </TouchableOpacity>
       <View style={{alignItems: 'center'}}>
         <TouchableOpacity
           onPress={() => navigation.toggleDrawer()}
@@ -67,7 +66,8 @@ const Home = ({navigation}) => {
           </Text>
         </TouchableOpacity>
         <TouchableOpacity
-   onPress={() => navigation.navigate('Moderators')}          style={{
+          onPress={() => navigation.navigate('Moderators')}
+          style={{
             marginVertical: 20,
             backgroundColor: colorPalette.secondary,
             borderRadius: 10,
