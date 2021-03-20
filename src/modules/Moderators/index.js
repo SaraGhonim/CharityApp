@@ -1,30 +1,19 @@
 import React from 'react';
-import {Div, Text} from 'react-native-magnus';
-import {
-  View,
-  Button,
-  StatusBar,
-  TouchableOpacity,
-  useWindowDimensions,FlatList
-} from 'react-native';
-import {colorPalette} from '../../utils/theme';
-import {AppText} from '../../AppText';
-import {human, material, systemWeights} from 'react-native-typography';
-import Icon from 'react-native-vector-icons/FontAwesome';
-const Moderators = () => {
-  const listTitleStyle = {...material.title,}
-    //  ...systemWeights.bold};
-
-  const {width, height} = useWindowDimensions();
+import {Div, Text, Input, Icon} from 'react-native-magnus';
+import Moderators from './navigation/index';
+const Index = () => {
   return (
-    <View style={{}}>
-      <StatusBar backgroundColor="#fff" barStyle="dark-content" />
-     
-      <Text>moderator</Text>
-      
-      
-    </View>
+    <Div flex={1}>
+      <Div flex={1} justifyContent="center" px="sm">
+        <Text fontWeight="700" fontSize="2xl">
+          Moderators
+        </Text>
+      </Div>
+      <Div flex={7}>
+        <Moderators />
+      </Div>
+    </Div>
   );
 };
 
-export default Moderators;
+export default Index;

@@ -4,7 +4,8 @@ import {createStackNavigator} from '@react-navigation/stack';
 import {createDrawerNavigator} from '@react-navigation/drawer';
 import {Div, Text} from 'react-native-magnus';
 
-import {StatusBar,
+import {
+  StatusBar,
   View,
   TextInput,
   Button,
@@ -50,8 +51,8 @@ const SignUp = ({navigation}) => {
   };
 
   return (
-    <View style={{flex:1,backgroundColor:'white'}}>
-                        <StatusBar backgroundColor="#fff" barStyle="dark-content" />
+    <View style={{flex: 1, backgroundColor: 'white'}}>
+      <StatusBar backgroundColor="#fff" barStyle="dark-content" />
 
       <AppText
         textStyle={[listTitleStyle]}
@@ -78,7 +79,7 @@ const SignUp = ({navigation}) => {
         Sign up
       </AppText>
       <View style={{alignItems: 'center'}}>
-      <Controller
+        <Controller
           control={control}
           render={({onChange, onBlur, value}) => (
             <TextInput
@@ -142,8 +143,7 @@ const SignUp = ({navigation}) => {
           control={control}
           render={({onChange, onBlur, value}) => (
             <TextInput
-            secureTextEntry={true}
-
+              secureTextEntry={true}
               placeholder="Password"
               placeholderTextColor={colorPalette.secondaryDark}
               autoCapitalize="none"
@@ -167,7 +167,7 @@ const SignUp = ({navigation}) => {
         />
         {errors.firstName && <Text>This is required.</Text>}
 
-<Controller
+        <Controller
           control={control}
           render={({onChange, onBlur, value}) => (
             <TextInput
@@ -226,9 +226,8 @@ const SignUp = ({navigation}) => {
           defaultValue=""
         />
         {errors.firstName && <Text>This is required.</Text>}
-
       </View>
-     
+
       <View style={{alignItems: 'center'}}>
         <TouchableOpacity
           onPress={handleSubmit(onSubmit)}
@@ -240,7 +239,7 @@ const SignUp = ({navigation}) => {
             height: height * 0.06,
             alignItems: 'center',
             justifyContent: 'center',
-            marginBottom:10
+            marginBottom: 10,
           }}>
           <Text
             color={colorPalette.surfaceColor}
@@ -258,11 +257,13 @@ const SignUp = ({navigation}) => {
               color: colorPalette.secondaryDark,
               textAlign: 'right',
             }}>
-           Already have an account ?
+            Already have an account ?
           </Text>
 
           <Text
-              onPress={()=>{navigation.navigate('LogIn')}}
+            onPress={() => {
+              navigation.navigate('LogIn');
+            }}
             // textStyle={[listTitleStyle]}
             style={{
               fontSize: 13,

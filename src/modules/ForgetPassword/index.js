@@ -1,8 +1,7 @@
 import React, {useState, useRef} from 'react';
-import {NavigationContainer} from '@react-navigation/native';
+import {NavigationContainer, Text} from '@react-navigation/native';
 import {createStackNavigator} from '@react-navigation/stack';
 import {createDrawerNavigator} from '@react-navigation/drawer';
-import {Div, Text} from 'react-native-magnus';
 
 import {
   View,
@@ -25,7 +24,6 @@ import {human, material, systemWeights} from 'react-native-typography';
 const ForgetPassword = ({navigation}) => {
   const listTitleStyle = {...material.headlineObject, ...systemWeights.bold};
 
- 
   const [secureTextEntry, setSecureText] = useState(true);
 
   const [loading, setLoading] = useState(false);
@@ -47,33 +45,33 @@ const ForgetPassword = ({navigation}) => {
   };
 
   return (
-    <View style={{backgroundColor:'white',flex:1,}}>
+    <View style={{backgroundColor: 'white', flex: 1}}>
       <StatusBar backgroundColor="#fff" barStyle="dark-content" />
       <View style={{alignItems: 'center'}}>
-       <Image
-        style={{
-          width: width * 0.5,
-          height: width * 0.5,
-          top: 40,
-          marginBottom: 40,
-        }}
-        source={pattern}
-        resizeMode={Image.resizeMode.contain}
-      /> 
-      <AppText
-        textStyle={[listTitleStyle]}
-        style={{
-          color: colorPalette.primaryDark,
-          fontSize: 24,
-          marginTop: 20,
-          marginHorizontal: 20,
-          marginBottom: 10,
-          letterSpacing: 1,
-          fontWeight: 'bold',
-        }}>
-        Forget password ?
-       </AppText>
-       </View>
+        <Image
+          style={{
+            width: width * 0.5,
+            height: width * 0.5,
+            top: 40,
+            marginBottom: 40,
+          }}
+          source={pattern}
+          resizeMode={Image.resizeMode.contain}
+        />
+        <AppText
+          textStyle={[listTitleStyle]}
+          style={{
+            color: colorPalette.primaryDark,
+            fontSize: 24,
+            marginTop: 20,
+            marginHorizontal: 20,
+            marginBottom: 10,
+            letterSpacing: 1,
+            fontWeight: 'bold',
+          }}>
+          Forget password ?
+        </AppText>
+      </View>
 
       <View style={{alignItems: 'center'}}>
         <Controller

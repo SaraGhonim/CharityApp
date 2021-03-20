@@ -6,7 +6,8 @@ import {
   TouchableOpacity,
   useWindowDimensions,
 } from 'react-native';
-import {Icon, Text} from 'react-native-magnus';
+import {Text} from 'react-native-magnus';
+import {Avatar} from 'react-native-paper';
 
 import {useApp} from '../../globals/state/app';
 import {colorPalette} from '../../utils/theme';
@@ -24,17 +25,9 @@ const Home = ({navigation}) => {
       }}>
       <StatusBar backgroundColor="#fff" barStyle="dark-content" />
 
-    
       <TouchableOpacity onPress={() => navigation.toggleDrawer()}>
-              <Icon
-                name="menu"
-                color="secondary"
-                fontFamily="Feather"
-                // position="absolute"
-                size={10}
-                fontSize={20}
-              />
-            </TouchableOpacity>
+        <Avatar.Icon size={24} icon="menu"/>
+      </TouchableOpacity>
       <View style={{alignItems: 'center'}}>
         <TouchableOpacity
           onPress={() => navigation.toggleDrawer()}
@@ -67,7 +60,8 @@ const Home = ({navigation}) => {
           </Text>
         </TouchableOpacity>
         <TouchableOpacity
-   onPress={() => navigation.navigate('Moderators')}          style={{
+          onPress={() => navigation.navigate('Moderators')}
+          style={{
             marginVertical: 20,
             backgroundColor: colorPalette.secondary,
             borderRadius: 10,
