@@ -12,7 +12,6 @@ export default function App() {
       <OfflineNotice />
       <ThemeProvider theme={DefaultTheme}>
         <Mounter />
-      </ThemeProvider>
     </NetworkProvider>
   );
 }
