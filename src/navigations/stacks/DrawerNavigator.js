@@ -7,9 +7,12 @@ import HomeStack from './HomeStack';
 import ModeratorsScreen from '../../modules/Moderators';
 
 
-import SignUpScreen from '../../modules/SignUp';
-import PasswordResetScreen from '../../modules/PasswordReset';
-import ForgetPasswordScreen from '../../modules/ForgetPassword';
+import CasesScreen from '../../modules/Cases';
+import NewCaseScreen from '../../modules/NewCase';
+
+import SeasonCasesScreen from '../../modules/SeasonCases';
+import SeasonsScreen from '../../modules/Seasons';
+import AddDonationScreen from '../../modules/AddDonation';
 
 
 // import {DrawerContent} from '_screens/drawerContent';
@@ -28,11 +31,16 @@ const DrawerNavigator = () => {
       <Drawer.Screen name="Home" component={HomeScreen} />
 
       {/* <Drawer.Screen name="Home" component={HomeStack} /> */}
-      <Drawer.Screen name="Moderators" component={ModeratorsScreen} />
+        <Drawer.Screen name="Moderators" component={ModeratorsScreen} />
+        <Drawer.Screen name="AddDonation" component={AddDonationScreen} />
 
-      <Drawer.Screen name="Seasons" component={SignUpScreen} />
-        <Drawer.Screen name="Cases" component={ForgetPasswordScreen} />
-        <Drawer.Screen name="Log out" component={PasswordResetScreen} />
+        <Drawer.Screen name="Cases" component={CasesScreen} />
+        <Drawer.Screen name="NewCase" component={NewCaseScreen} />
+
+        <Drawer.Screen name="Seasons" component={SeasonsScreen} />
+        <Drawer.Screen name="SeasonCases" component={SeasonCasesScreen} />
+
+        {/* <Drawer.Screen name="Log out" component={} /> */}
 
 
      </Drawer.Navigator>

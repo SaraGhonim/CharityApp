@@ -80,6 +80,21 @@ const Home = ({navigation}) => {
             Moderators
           </Text>
         </TouchableOpacity>
+        <TouchableOpacity
+   onPress={() => navigation.navigate('AddDonation')}   
+          style={{
+            marginVertical: 20,
+            backgroundColor: colorPalette.secondary,
+            borderRadius: 10,
+            width: width * 0.8,
+            height: height * 0.06,
+            alignItems: 'center',
+            justifyContent: 'center',
+          }}>
+          <Text color="#000" textAlign="center" fontSize={17}>
+            Add Donation
+          </Text>
+        </TouchableOpacity>
       </View>
     </View>
   );
