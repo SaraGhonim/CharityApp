@@ -3,7 +3,7 @@ import {NavigationContainer} from '@react-navigation/native';
 import {createStackNavigator} from '@react-navigation/stack';
 import {createDrawerNavigator} from '@react-navigation/drawer';
 import {Div, Text} from 'react-native-magnus';
-
+import axios from 'axios'
 import {
   StatusBar,
   View,
@@ -11,21 +11,18 @@ import {
   Button,
   Alert,
   TouchableOpacity,
-  useWindowDimensions,
+  useWindowDimensions,ScrollView,ActivityIndicator
 } from 'react-native';
 import {useForm, Controller} from 'react-hook-form';
 import {useApp} from '../../globals/state/app';
 import {colorPalette} from '../../utils/theme';
 import {AppText} from '../../AppText';
 import {human, material, systemWeights} from 'react-native-typography';
+import SnackBar from 'react-native-snackbar-component';
 
 const SignUp = ({navigation}) => {
   const listTitleStyle = {...material.headlineObject, ...systemWeights.bold};
 
-  const [empty1, setempty1] = useState(true);
-  const [empty2, setempty2] = useState(true);
-  const [clicked, setclicked] = useState(false);
-  const [empty3, setempty3] = useState(true);
 
   const [UserName, setUserName] = useState('');
   const [Code, setCode] = useState('');
@@ -33,11 +30,14 @@ const SignUp = ({navigation}) => {
   const [secureTextEntry, setSecureText] = useState(true);
 
   const [loading, setLoading] = useState(false);
-  const [{token}, {setToken1, retrieveToken}] = useApp();
+  const [{token,expiringToken}, {setToken1, retrieveToken,setexpiringToken}] = useApp();
+  const emailRef = useRef(null);
+
   const passwordRef = useRef(null);
+  const phoneRef = useRef(null);
 
   const codeRef = useRef(null);
-  // const [errors, setErrors] = useState(null);
+   const [Errors, setErrors] = useState(null);
 
   const {width, height} = useWindowDimensions();
   const updateSecureTextEntry = () => {
@@ -46,12 +46,43 @@ const SignUp = ({navigation}) => {
 
   const {control, handleSubmit, errors} = useForm();
   const onSubmit = (data) => {
-    navigation.navigate('Home');
-    console.log(data);
+    setLoading(true)
+    console.log('width', width);
+    console.log('height', height);
+    // navigation.navigate('Choose')
+    axios
+      .post(`https://charityserver-m7q4km3caa-ey.a.run.app/auth/signup`, {
+        email: data.email,
+        password: data.password,
+        firstName: data.name,
+        lastName: '',
+        phoneNumber: data.phone,
+        code: data.ActivationCode,
+      })
+      .then((response) => {
+        console.log('successsssssssssssssssssssssssss')
+        console.log('response.data', response.data.refresh_token);
+        setLoading(true);
+         setToken1(response.data.refresh_token);
+         setexpiringToken(response.data.token)
+        setLoading(false);
+         navigation.navigate('Home');
+      })
+      .catch((error) => {
+        console.log('errorrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrr')
+        console.log(error.response);
+        setLoading(false);
+         setErrors(error.response.data);
+
+        // Handle returned errors here
+      });
+    // navigation.navigate('Home');
+    console.log(data.password);
+
   };
 
   return (
-    <View style={{flex: 1, backgroundColor: 'white'}}>
+    <ScrollView style={{flex: 1, backgroundColor: 'white'}}>
       <StatusBar backgroundColor="#fff" barStyle="dark-content" />
 
       <AppText
@@ -101,13 +132,30 @@ const SignUp = ({navigation}) => {
               onBlur={onBlur}
               onChangeText={(value) => onChange(value)}
               value={value}
+              returnKeyType="next"
+              editable={!loading}
+              onSubmitEditing={() => {
+                emailRef.current.focus();
+               
+              }}
             />
           )}
-          name="firstName"
+          name="name"
           rules={{required: true}}
           defaultValue=""
         />
-        {errors.firstName && <Text>This is required.</Text>}
+        </View>
+        {errors.name &&  <Text
+          style={{
+            fontSize: 13,
+            marginTop: 5,
+
+            marginHorizontal: 22,
+            color: colorPalette.errorColor,
+          }}>
+          This is required.
+        </Text>}
+        <View style={{alignItems: 'center'}}>
 
         <Controller
           control={control}
@@ -131,13 +179,31 @@ const SignUp = ({navigation}) => {
               onBlur={onBlur}
               onChangeText={(value) => onChange(value)}
               value={value}
+              ref={emailRef}
+              returnKeyType="next"
+              editable={!loading}
+              onSubmitEditing={() => {
+                passwordRef.current.focus();
+               
+              }}
             />
           )}
-          name="firstName"
+          name="email"
           rules={{required: true}}
           defaultValue=""
         />
-        {errors.firstName && <Text>This is required.</Text>}
+        </View>
+        {errors.email &&  <Text
+          style={{
+            fontSize: 13,
+            marginTop: 5,
+
+            marginHorizontal: 22,
+            color: colorPalette.errorColor,
+          }}>
+          This is required.
+        </Text>}
+        <View style={{alignItems: 'center'}}>
 
         <Controller
           control={control}
@@ -160,12 +226,33 @@ const SignUp = ({navigation}) => {
               onBlur={onBlur}
               onChangeText={(value) => onChange(value)}
               value={value}
+              ref={passwordRef}
+              returnKeyType="next"
+              editable={!loading}
+              onSubmitEditing={() => {
+                phoneRef.current.focus();
+               
+              }}
             />
           )}
-          name="Password"
+          name="password"
+          rules={{required: true}}
           defaultValue=""
+
+
         />
-        {errors.firstName && <Text>This is required.</Text>}
+        </View>
+        {errors.password &&  <Text
+          style={{
+            fontSize: 13,
+            marginTop: 5,
+
+            marginHorizontal: 22,
+            color: colorPalette.errorColor,
+          }}>
+          This is required.
+        </Text>}
+        <View style={{alignItems: 'center'}}>
 
         <Controller
           control={control}
@@ -189,13 +276,32 @@ const SignUp = ({navigation}) => {
               onBlur={onBlur}
               onChangeText={(value) => onChange(value)}
               value={value}
+              ref={phoneRef}
+              returnKeyType="next"
+              editable={!loading}
+              onSubmitEditing={() => {
+                codeRef.current.focus();
+               
+              }}
             />
           )}
-          name="Phone"
+          name="phone"
           rules={{required: true}}
           defaultValue=""
+
         />
-        {errors.firstName && <Text>This is required.</Text>}
+        </View>
+        {errors.phone &&  <Text
+          style={{
+            fontSize: 13,
+            marginTop: 5,
+
+            marginHorizontal: 22,
+            color: colorPalette.errorColor,
+          }}>
+          This is required.
+        </Text>}
+        <View style={{alignItems: 'center'}}>
 
         <Controller
           control={control}
@@ -219,14 +325,27 @@ const SignUp = ({navigation}) => {
               onBlur={onBlur}
               onChangeText={(value) => onChange(value)}
               value={value}
+              ref={codeRef}
+              editable={!loading}
+              onSubmitEditing={               
+              handleSubmit(onSubmit)}
             />
           )}
           name="ActivationCode"
           rules={{required: true}}
           defaultValue=""
         />
-        {errors.firstName && <Text>This is required.</Text>}
-      </View>
+        </View>
+        {errors.ActivationCode &&  <Text
+          style={{
+            fontSize: 13,
+            marginTop: 5,
+
+            marginHorizontal: 22,
+            color: colorPalette.errorColor,
+          }}>
+          This is required.
+        </Text>}
 
       <View style={{alignItems: 'center'}}>
         <TouchableOpacity
@@ -241,19 +360,20 @@ const SignUp = ({navigation}) => {
             justifyContent: 'center',
             marginBottom: 10,
           }}>
-          <Text
+         { !loading?<Text
             color={colorPalette.surfaceColor}
             textAlign="center"
             fontSize={17}>
             Sign Up
-          </Text>
+          </Text>:
+          <ActivityIndicator size="small" color="#fff"/>}
         </TouchableOpacity>
-        <View style={{flexDirection: 'row'}}>
+        <View style={{flexDirection: 'row',marginBottom:50}}>
           <Text
             // textStyle={[listTitleStyle]}
             style={{
               fontSize: 13,
-              marginTop: 28,
+              marginTop: 20,
               color: colorPalette.secondaryDark,
               textAlign: 'right',
             }}>
@@ -267,7 +387,7 @@ const SignUp = ({navigation}) => {
             // textStyle={[listTitleStyle]}
             style={{
               fontSize: 13,
-              marginTop: 28,
+              marginTop: 20,
               marginLeft: 5,
               color: colorPalette.primary,
               textAlign: 'right',
@@ -275,8 +395,32 @@ const SignUp = ({navigation}) => {
             LOG IN
           </Text>
         </View>
+
+        {Errors ?<View style={{alignItems: 'center',backgroundColor:'white'}}>
+         <SnackBar
+    visible={true}
+     textMessage="Something went wrong"
+
+    actionHandler={() => {
+      setErrors(null);
+    
+      console.log('snackbar button clicked!');
+    }}
+    actionText="Try Again"
+    backgroundColor="rgb(216, 208, 208)"
+    containerStyle={{
+      borderRadius: 15,
+       // marginTop:20,
+      marginHorizontal: width * 0.03,
+    }}
+    accentColor="#13743A"
+    messageColor="#13743A"
+    // height={50}
+  /> 
+  <Text style={{color:'white'}} >sasadsadddddddddddddddddddddddddddddddddddddddddd</Text>
+           </View> :null}
       </View>
-    </View>
+    </ScrollView>
   );
 };
 

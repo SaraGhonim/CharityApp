@@ -1,10 +1,21 @@
 import {getToken, setToken,removeToken} from '../../../services/token';
 export default {
-  increment: () => ({setState, getState}) => {
-    const currentCount = getState().counter;
-    setState({counter: currentCount + 1});
+ 
+  setCharityName: (CharityName) => ({setState, getState}) => {
+    setState({CharityName: CharityName});
   },
-  
+  setType: (Type) => ({setState, getState}) => {
+    setState({Type: Type});
+  },
+  setAddress: (Address) => ({setState, getState}) => {
+    setState({Address: Address});
+  },
+
+  setexpiringToken: (expiringToken) => ({setState, getState}) => {
+    setState({expiringToken: expiringToken});
+  },
+ 
+
   retrieveToken: () => async ({setState, getState}) => {
     try {
       //  get current token

@@ -38,7 +38,7 @@ export const Mounter = () => {
   }, []);
 
 
-  if (false) {
+  if (true) {
     return (<AuthStack/>);
   }
   else

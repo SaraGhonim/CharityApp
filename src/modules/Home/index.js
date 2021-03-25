@@ -7,7 +7,7 @@ import {
   useWindowDimensions,
 } from 'react-native';
 import {Text} from 'react-native-magnus';
-import {Avatar} from 'react-native-paper';
+// import {Avatar} from 'react-native-paper';
 
 import {useApp} from '../../globals/state/app';
 import {colorPalette} from '../../utils/theme';
@@ -26,7 +26,7 @@ const Home = ({navigation}) => {
       <StatusBar backgroundColor="#fff" barStyle="dark-content" />
 
       <TouchableOpacity onPress={() => navigation.toggleDrawer()}>
-        <Avatar.Icon size={24} icon="menu"/>
+        {/* <Avatar.Icon size={24} icon="menu"/> */}
       </TouchableOpacity>
       <View style={{alignItems: 'center'}}>
         <TouchableOpacity

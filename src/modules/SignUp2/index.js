@@ -1,15 +1,17 @@
 import React, {useState, useRef} from 'react';
-
+import {NavigationContainer} from '@react-navigation/native';
+import {createStackNavigator} from '@react-navigation/stack';
+import {createDrawerNavigator} from '@react-navigation/drawer';
 import {Div, Text} from 'react-native-magnus';
-import axios from 'axios';
-
+import axios from 'axios'
 import {
+  StatusBar,
   View,
   TextInput,
   Button,
-  Alert,StatusBar,
+  Alert,
   TouchableOpacity,
-  useWindowDimensions,ActivityIndicator
+  useWindowDimensions,ScrollView,ActivityIndicator
 } from 'react-native';
 import {useForm, Controller} from 'react-hook-form';
 import {useApp} from '../../globals/state/app';
@@ -18,22 +20,24 @@ import {AppText} from '../../AppText';
 import {human, material, systemWeights} from 'react-native-typography';
 import SnackBar from 'react-native-snackbar-component';
 
-const LogIn = ({navigation}) => {
+const SignUp2 = ({navigation}) => {
   const listTitleStyle = {...material.headlineObject, ...systemWeights.bold};
 
-  
-  const [clicked, setclicked] = useState(false);
 
-  const [Email, setEmail] = useState('');
+  const [UserName, setUserName] = useState('');
+  const [Code, setCode] = useState('');
   const [Password, setPassword] = useState('');
   const [secureTextEntry, setSecureText] = useState(true);
 
   const [loading, setLoading] = useState(false);
-  const [{token}, {setToken1, retrieveToken,setexpiringToken}] = useApp();
+  const [{Type,Address,CharityName,token},{setToken1,setexpiringToken}] = useApp();
+  const emailRef = useRef(null);
+
   const passwordRef = useRef(null);
+  const phoneRef = useRef(null);
 
   const codeRef = useRef(null);
-   const [Errors, setErrors] = useState(null);
+  const [Errors, setErrors] = useState(null);
 
   const {width, height} = useWindowDimensions();
   const updateSecureTextEntry = () => {
@@ -47,9 +51,17 @@ const LogIn = ({navigation}) => {
     console.log('height', height);
     // navigation.navigate('Choose')
     axios
-      .post(`https://charityserver-m7q4km3caa-ey.a.run.app/auth/login`, {
+      .post(`https://charityserver-m7q4km3caa-ey.a.run.app/auth/signup`, {
         email: data.email,
         password: data.password,
+        firstName: data.name,
+        phoneNumber: data.phone,
+        account :{
+          name:CharityName,
+          type:Type, 
+          address:Address
+        }
+        // ActivationCode: data.ActivationCode,
       })
       .then((response) => {
         console.log('successsssssssssssssssssssssssss')
@@ -71,13 +83,12 @@ const LogIn = ({navigation}) => {
       });
     // navigation.navigate('Home');
     console.log(data.password);
+
   };
 
-
-
   return (
-    <View style={{flex:1,backgroundColor:'white'}}>
-                        <StatusBar backgroundColor="#fff" barStyle="dark-content" />
+    <ScrollView style={{flex: 1, backgroundColor: 'white'}}>
+      <StatusBar backgroundColor="#fff" barStyle="dark-content" />
 
       <AppText
         textStyle={[listTitleStyle]}
@@ -101,21 +112,19 @@ const LogIn = ({navigation}) => {
           color: colorPalette.onSecondaryLight,
           marginHorizontal: 20,
         }}>
-        Log in
+        Sign up
       </AppText>
       <View style={{alignItems: 'center'}}>
         <Controller
           control={control}
           render={({onChange, onBlur, value}) => (
             <TextInput
-           
-
-              placeholder="Email"
+              placeholder="Name"
               placeholderTextColor={colorPalette.secondaryDark}
               autoCapitalize="none"
               keyboardType="default"
               underlineColorAndroid={
-                errors.email ? 'red' : colorPalette.secondaryDark
+                Password.includes(' ') ? 'red' : colorPalette.secondaryDark
               }
               style={{
                 marginTop: 12,
@@ -128,22 +137,14 @@ const LogIn = ({navigation}) => {
               onBlur={onBlur}
               onChangeText={(value) => onChange(value)}
               value={value}
-              returnKeyType="next"
-              editable={!loading}
-              onSubmitEditing={() => {
-                passwordRef.current.focus();
-               
-              }}
-
             />
           )}
-          name="email"
+          name="name"
           rules={{required: true}}
           defaultValue=""
         />
-      </View>
-      {errors.email && (
-        <Text
+        </View>
+        {errors.name &&  <Text
           style={{
             fontSize: 13,
             marginTop: 5,
@@ -152,9 +153,50 @@ const LogIn = ({navigation}) => {
             color: colorPalette.errorColor,
           }}>
           This is required.
-        </Text>
-      )}
-      <View style={{alignItems: 'center'}}>
+        </Text>}
+        <View style={{alignItems: 'center'}}>
+
+        <Controller
+          control={control}
+          render={({onChange, onBlur, value}) => (
+            <TextInput
+              placeholder="Email"
+              placeholderTextColor={colorPalette.secondaryDark}
+              autoCapitalize="none"
+              keyboardType="default"
+              underlineColorAndroid={
+                Password.includes(' ') ? 'red' : colorPalette.secondaryDark
+              }
+              style={{
+                marginTop: 12,
+                marginHorizontal: 20,
+                width: width * 0.9,
+
+                color: '#000',
+              }}
+              // style={styles.input}
+              onBlur={onBlur}
+              onChangeText={(value) => onChange(value)}
+              value={value}
+            />
+          )}
+          name="email"
+          rules={{required: true}}
+          defaultValue=""
+        />
+        </View>
+        {errors.email &&  <Text
+          style={{
+            fontSize: 13,
+            marginTop: 5,
+
+            marginHorizontal: 22,
+            color: colorPalette.errorColor,
+          }}>
+          This is required.
+        </Text>}
+        <View style={{alignItems: 'center'}}>
+
         <Controller
           control={control}
           render={({onChange, onBlur, value}) => (
@@ -164,83 +206,105 @@ const LogIn = ({navigation}) => {
               placeholderTextColor={colorPalette.secondaryDark}
               autoCapitalize="none"
               keyboardType="default"
-              
-
               underlineColorAndroid={
-                errors.password ? 'red' : colorPalette.secondaryDark
+                Password.includes(' ') ? 'red' : colorPalette.secondaryDark
               }
               style={{
                 width: width * 0.9,
-                marginTop: 29,
+                marginTop: 12,
                 marginHorizontal: 20,
                 color: '#000',
               }}
-              ref={passwordRef}
-              editable={!loading}
-              onSubmitEditing={
-                handleSubmit(onSubmit)}
               onBlur={onBlur}
               onChangeText={(value) => onChange(value)}
               value={value}
             />
           )}
-          rules={{required: true}}
           name="password"
+          rules={{required: true}}
           defaultValue=""
-        />
-      </View>
 
-      {errors.password && (
-        <Text
+
+        />
+        </View>
+        {errors.password &&  <Text
           style={{
             fontSize: 13,
-            marginHorizontal: 22,
             marginTop: 5,
+
+            marginHorizontal: 22,
             color: colorPalette.errorColor,
           }}>
           This is required.
-        </Text>
-      )}
-      <View style={{alignItems: 'flex-end'}}>
-        <Text
-          onPress={()=>{navigation.navigate('ForgetPassword')}}
+        </Text>}
+        <View style={{alignItems: 'center'}}>
 
-          // textStyle={[listTitleStyle]}
+        <Controller
+          control={control}
+          render={({onChange, onBlur, value}) => (
+            <TextInput
+              placeholder="Phone number"
+              placeholderTextColor={colorPalette.secondaryDark}
+              autoCapitalize="none"
+              keyboardType="default"
+              underlineColorAndroid={
+                Password.includes(' ') ? 'red' : colorPalette.secondaryDark
+              }
+              style={{
+                marginTop: 12,
+                marginHorizontal: 20,
+                width: width * 0.9,
+
+                color: '#000',
+              }}
+              // style={styles.input}
+              onBlur={onBlur}
+              onChangeText={(value) => onChange(value)}
+              
+              value={value}
+            
+            />
+          )}
+          name="phone"
+          rules={{required: true}}
+          defaultValue=""
+
+        />
+        </View>
+        {errors.phone &&  <Text
           style={{
             fontSize: 13,
-            marginTop: 28,
-            marginHorizontal: 17,
-            color: colorPalette.onSecondaryLight,
-            textAlign: 'right',
+            marginTop: 5,
+
+            marginHorizontal: 22,
+            color: colorPalette.errorColor,
           }}>
-          Foregt Password ?
-        </Text>
-      </View>
+          This is required.
+        </Text>}
+  
+
       <View style={{alignItems: 'center'}}>
         <TouchableOpacity
-          onPress={
-    
-            handleSubmit(onSubmit)
-          }
+          onPress={handleSubmit(onSubmit)}
           style={{
-            marginVertical: 60,
+            marginTop: 50,
             backgroundColor: colorPalette.primary,
             borderRadius: 10,
             width: width * 0.8,
             height: height * 0.06,
             alignItems: 'center',
             justifyContent: 'center',
+            marginBottom: 10,
           }}>
          { !loading?<Text
             color={colorPalette.surfaceColor}
             textAlign="center"
             fontSize={17}>
-            Log in
+            Sign Up
           </Text>:
           <ActivityIndicator size="small" color="#fff"/>}
-
         </TouchableOpacity>
-        <View style={{flexDirection: 'row',}}>
+        <View style={{flexDirection: 'row',marginBottom:50}}>
           <Text
             // textStyle={[listTitleStyle]}
             style={{
@@ -249,28 +313,29 @@ const LogIn = ({navigation}) => {
               color: colorPalette.secondaryDark,
               textAlign: 'right',
             }}>
-            Don't have an account ?
+            Already have an account ?
           </Text>
 
           <Text
-          onPress={()=>{navigation.navigate('Choose')}}
+            onPress={() => {
+              navigation.navigate('LogIn');
+            }}
             // textStyle={[listTitleStyle]}
             style={{
               fontSize: 13,
               marginTop: 28,
               marginLeft: 5,
-              // marginBottom:10,
               color: colorPalette.primary,
               textAlign: 'right',
             }}>
-            SIGN UP
+            LOG IN
           </Text>
-         
         </View>
-       {Errors ?<View style={{alignItems: 'center',backgroundColor:'white',marginTop:40}}>
+
+        {Errors ?<View style={{alignItems: 'center',backgroundColor:'white',marginTop:40}}>
          <SnackBar
     visible={true}
-     textMessage="Invalid email or password"
+     textMessage="Something went wrong"
 
     actionHandler={() => {
       setErrors(null);
@@ -292,11 +357,8 @@ const LogIn = ({navigation}) => {
            </View> :null}
 
       </View>
-
-
-    </View>
+    </ScrollView>
   );
 };
 
-export default LogIn;
-
+export default SignUp2;

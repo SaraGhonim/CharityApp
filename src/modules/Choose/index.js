@@ -2,7 +2,6 @@ import React, {useState, useRef} from 'react';
 import {NavigationContainer} from '@react-navigation/native';
 import {createStackNavigator} from '@react-navigation/stack';
 import {createDrawerNavigator} from '@react-navigation/drawer';
-import SnackBar from 'react-native-snackbar-component';
 
 import {
   View,
@@ -10,19 +9,20 @@ import {
   Button,
   Alert,
   StatusBar,
-  TouchableOpacity,ActivityIndicator,
-  useWindowDimensions
+  TouchableOpacity,
+  ActivityIndicator,
+  useWindowDimensions,
 } from 'react-native';
 import Image from 'react-native-fast-image';
 import pattern from '../../assets/images/logo.png';
-import {Text} from 'react-native-magnus'
+import {Text} from 'react-native-magnus';
 import {useForm, Controller} from 'react-hook-form';
 import {useApp} from '../../globals/state/app';
 import {colorPalette} from '../../utils/theme';
 import {AppText} from '../../AppText';
 import {human, material, systemWeights} from 'react-native-typography';
-import axios from 'axios'
-const ForgetPassword = ({navigation}) => {
+import axios from 'axios';
+const Choose = ({navigation}) => {
   const listTitleStyle = {...material.headlineObject, ...systemWeights.bold};
 
   const [secureTextEntry, setSecureText] = useState(true);
@@ -32,23 +32,25 @@ const ForgetPassword = ({navigation}) => {
   const passwordRef = useRef(null);
 
   const codeRef = useRef(null);
-   const [Errors, setErrors] = useState(null);
+  // const [errors, setErrors] = useState(null);
 
   const {width, height} = useWindowDimensions();
 
-
   const {control, handleSubmit, errors} = useForm();
   const onSubmit = (data) => {
-    setLoading(true)
+    setLoading(true);
     console.log('width', width);
     console.log('height', height);
     // navigation.navigate('Choose')
     axios
-      .post(`https://charityserver-m7q4km3caa-ey.a.run.app/auth/resetPassword`, {
-        email: data.email,
-      })
+      .post(
+        `https://charityserver-m7q4km3caa-ey.a.run.app/auth/resetPassword`,
+        {
+          email: data.email,
+        },
+      )
       .then((response) => {
-        console.log('successsssssssssssssssssssssssss')
+        console.log('successsssssssssssssssssssssssss');
         // console.log('response.data', response.data.refresh_token);
         setLoading(true);
         // setToken1(response.data.refresh_token);
@@ -56,20 +58,19 @@ const ForgetPassword = ({navigation}) => {
         //  navigation.navigate('Home');
       })
       .catch((error) => {
-        console.log('errorrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrr')
+        console.log('errorrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrr');
         console.log(error.response);
         setLoading(false);
-         setErrors(error.response);
+        // setErrors(error.response);
 
         // Handle returned errors here
       });
   };
 
-
   return (
     <View style={{backgroundColor: 'white', flex: 1}}>
       <StatusBar backgroundColor="#fff" barStyle="dark-content" />
-     <View style={{alignItems: 'center'}}>
+      <View style={{alignItems: 'center'}}>
         <Image
           style={{
             width: width * 0.5,
@@ -80,7 +81,7 @@ const ForgetPassword = ({navigation}) => {
           source={pattern}
           resizeMode={Image.resizeMode.contain}
         />
-         <AppText
+        <AppText
           textStyle={[listTitleStyle]}
           style={{
             color: colorPalette.primaryDark,
@@ -91,56 +92,15 @@ const ForgetPassword = ({navigation}) => {
             letterSpacing: 1,
             fontWeight: 'bold',
           }}>
-          Forget password ?
+          Welcome
         </AppText>
       </View>
 
       <View style={{alignItems: 'center'}}>
-        <Controller
-          control={control}
-          render={({onChange, onBlur, value}) => (
-            <TextInput
-              placeholder="Email"
-              placeholderTextColor={colorPalette.secondaryDark}
-              autoCapitalize="none"
-              keyboardType="default"
-              underlineColorAndroid={
-                errors.email ? 'red' : colorPalette.secondaryDark
-              }
-              style={{
-                marginTop: 12,
-                marginHorizontal: 20,
-                width: width * 0.9,
-
-                color: '#000',
-              }}
-              // style={styles.input}
-              onBlur={onBlur}
-              onChangeText={(value) => onChange(value)}
-              value={value}
-            />
-          )}
-          name="email"
-          rules={{required: true}}
-          defaultValue=""
-        />
-      </View>
-      {errors.email && (
-        <Text
-          style={{
-            fontSize: 13,
-            marginTop: 5,
-
-            marginHorizontal: 22,
-            color: colorPalette.errorColor,
-          }}>
-          This is required.
-        </Text>
-      )}
-
-      <View style={{alignItems: 'center'}}>
         <TouchableOpacity
-          onPress={handleSubmit(onSubmit)}
+          onPress={() => {
+            navigation.navigate('SignUp');
+          }}
           style={{
             marginTop: 60,
             backgroundColor: colorPalette.primary,
@@ -151,17 +111,17 @@ const ForgetPassword = ({navigation}) => {
             justifyContent: 'center',
           }}>
          
-          { !loading?<Text
-            color={colorPalette.surfaceColor}
-            textAlign="center"
-            fontSize={17}>
-            Send me a mail
-          </Text>:
-          <ActivityIndicator size="small" color="#fff"/>}
+            <Text
+              color={colorPalette.surfaceColor}
+              textAlign="center"
+              fontSize={17}>
+              Do you have an invitation ?
+            </Text>
+          
         </TouchableOpacity>
         <TouchableOpacity
           onPress={() => {
-            navigation.pop();
+            navigation.navigate('CharityInfo');
           }}
           style={{
             marginVertical: 20,
@@ -173,36 +133,12 @@ const ForgetPassword = ({navigation}) => {
             justifyContent: 'center',
           }}>
           <Text color="#000" textAlign="center" fontSize={17}>
-            Back to Log In
+            New Account
           </Text>
         </TouchableOpacity>
-      </View> 
-
-      {Errors ?<View style={{alignItems: 'center',backgroundColor:'white',marginTop:40}}>
-         <SnackBar
-    visible={true}
-     textMessage="Error"
-
-    actionHandler={() => {
-      setErrors(null);
-    
-      console.log('snackbar button clicked!');
-    }}
-    actionText="Try Again"
-    backgroundColor="rgb(216, 208, 208,.6)" 
-    containerStyle={{
-      borderRadius: 15,
-       // marginTop:20,
-      marginHorizontal: width * 0.03,
-    }}
-    accentColor="#13743A"
-    messageColor="#13743A"
-    // height={50}
-  /> 
-  <Text style={{color:'white'}} >sasadsadddddddddddddddddddddddddddddddddddddddddd</Text>
-           </View> :null}
+      </View>
     </View>
   );
 };
 
-export default ForgetPassword;
+export default Choose;

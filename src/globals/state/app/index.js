@@ -3,7 +3,7 @@ import actions from './actions';
 // This is the value of the store on initialisation
 
 const AppStore = createStore({
-  initialState: {language: null, token: null,counter:0},
+  initialState: {language: null, token: null,CharityName:'Mersal',Type:'charity',Address:'15th el bahr street',expiringToken:null},
   actions,
 });
 

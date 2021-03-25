@@ -64,7 +64,7 @@ import {human, material, systemWeights} from 'react-native-typography';
       </TouchableOpacity>
 
       <TouchableOpacity
-        onPress={() => navigation.navigate('SignUp')}
+        onPress={() => navigation.navigate('Choose')}
         style={{
           marginTop: 20,
           backgroundColor: colorPalette.secondary,
