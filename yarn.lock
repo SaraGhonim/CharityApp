@@ -5831,11 +5831,6 @@ react-native-offline@^5.8.0:
     redux "^4.0.1"
     redux-saga "^1.0.2"
 
-react-native-pager-view@^5.1.1:
-  version "5.1.1"
-  resolved "https://registry.yarnpkg.com/react-native-pager-view/-/react-native-pager-view-5.1.1.tgz#63f739b9c909b530c70e76217a2ded9a7048647c"
-  integrity sha512-QEEYvEucKNZfjknXAEcbhIXGVJLd+TXPmrREWPM4xpgt7npMr1l+elLWVhsyWsOFHMJM71U9lOg8atdBSliLoA==
-
 react-native-reanimated@^2.0.0:
   version "2.0.0"
   resolved "https://registry.yarnpkg.com/react-native-reanimated/-/react-native-reanimated-2.0.0.tgz#0eb2f196e8fde23cf918530074134177aaee8702"
