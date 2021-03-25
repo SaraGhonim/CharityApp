@@ -6,14 +6,13 @@ import {
   TouchableOpacity,
   useWindowDimensions,
 } from 'react-native';
-import {Text} from 'react-native-magnus';
-// import {Avatar} from 'react-native-paper';
+import { Text } from 'react-native-magnus';
 
-import {useApp} from '../../globals/state/app';
-import {colorPalette} from '../../utils/theme';
+import { useApp } from '../../globals/state/app';
+import { colorPalette } from '../../utils/theme';
 
-const Home = ({navigation}) => {
-  const {width, height} = useWindowDimensions();
+const Home = ({ navigation }) => {
+  const { width, height } = useWindowDimensions();
 
   return (
     <View
@@ -28,7 +27,7 @@ const Home = ({navigation}) => {
       <TouchableOpacity onPress={() => navigation.toggleDrawer()}>
         {/* <Avatar.Icon size={24} icon="menu"/> */}
       </TouchableOpacity>
-      <View style={{alignItems: 'center'}}>
+      <View style={{ alignItems: 'center' }}>
         <TouchableOpacity
           onPress={() => navigation.toggleDrawer()}
           style={{
@@ -45,7 +44,7 @@ const Home = ({navigation}) => {
           </Text>
         </TouchableOpacity>
         <TouchableOpacity
-          onPress={() => {}}
+          onPress={() => { }}
           style={{
             marginTop: 20,
             backgroundColor: colorPalette.primary,
@@ -75,7 +74,7 @@ const Home = ({navigation}) => {
           </Text>
         </TouchableOpacity>
         <TouchableOpacity
-   onPress={() => navigation.navigate('AddDonation')}   
+          onPress={() => navigation.navigate('AddDonation')}
           style={{
             marginVertical: 20,
             backgroundColor: colorPalette.secondary,
