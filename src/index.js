@@ -5,14 +5,15 @@ import DefaultTheme from './globals/theme';
 import { NetworkProvider } from 'react-native-offline';
 import { Mounter } from './modules/Mounter';
 import OfflineNotice from './components/OfflineNotice';
-
+import { NotifierWrapper } from 'react-native-notifier';
 export default function App() {
   return (
     <NetworkProvider>
       <OfflineNotice />
       <ThemeProvider theme={DefaultTheme}>
-        
-        <Mounter />
+        <NotifierWrapper>
+          <Mounter />
+        </NotifierWrapper>
       </ThemeProvider>
     </NetworkProvider>
   );
