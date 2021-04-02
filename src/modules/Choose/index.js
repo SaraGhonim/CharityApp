@@ -44,7 +44,7 @@ const Choose = ({navigation}) => {
     // navigation.navigate('Choose')
     axios
       .post(
-        `https://charityserver-m7q4km3caa-ey.a.run.app/auth/resetPassword`,
+        `https://charity-handlig-app.herokuapp.com/api/auth/resetPassword`,
         {
           email: data.email,
         },

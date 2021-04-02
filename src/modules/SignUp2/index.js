@@ -1,3 +1,5 @@
+
+
 import React, {useState, useRef} from 'react';
 import {NavigationContainer} from '@react-navigation/native';
 import {createStackNavigator} from '@react-navigation/stack';
@@ -31,13 +33,16 @@ const SignUp2 = ({navigation}) => {
 
   const [loading, setLoading] = useState(false);
   const [{Type,Address,CharityName,token},{setToken1,setexpiringToken}] = useApp();
+
   const emailRef = useRef(null);
+
 
   const passwordRef = useRef(null);
   const phoneRef = useRef(null);
 
-  const codeRef = useRef(null);
-  const [Errors, setErrors] = useState(null);
+  const lastNameRef = useRef(null);
+   const [Errors, setErrors] = useState(null);
+   const [Message, setMessage] = useState(null);
 
   const {width, height} = useWindowDimensions();
   const updateSecureTextEntry = () => {
@@ -46,16 +51,20 @@ const SignUp2 = ({navigation}) => {
 
   const {control, handleSubmit, errors} = useForm();
   const onSubmit = (data) => {
+    setMessage(null)
+    setErrors(null)
     setLoading(true)
     console.log('width', width);
     console.log('height', height);
     // navigation.navigate('Choose')
     axios
-      .post(`https://charityserver-m7q4km3caa-ey.a.run.app/auth/signup`, {
+      .post(`https://charity-handlig-app.herokuapp.com/api/auth/signup`, {
         email: data.email,
         password: data.password,
         firstName: data.name,
+        lastName:data.lastName,
         phoneNumber: data.phone,
+
         account :{
           name:CharityName,
           type:Type, 
@@ -66,18 +75,19 @@ const SignUp2 = ({navigation}) => {
       .then((response) => {
         console.log('successsssssssssssssssssssssssss')
         console.log('response.data', response.data.refresh_token);
-        setLoading(true);
-         setToken1(response.data.refresh_token);
-         setexpiringToken(response.data.token)
+        setMessage(response.data.message)
 
+        // setLoading(true);
+        //  setToken1(response.data.refresh_token);
+        //  setexpiringToken(response.data.token)
         setLoading(false);
-         navigation.navigate('Home');
+        //  navigation.navigate('Home');
       })
       .catch((error) => {
         console.log('errorrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrr')
         console.log(error.response);
         setLoading(false);
-        setErrors(error.response);
+         setErrors(error.response.data.error);
 
         // Handle returned errors here
       });
@@ -119,12 +129,12 @@ const SignUp2 = ({navigation}) => {
           control={control}
           render={({onChange, onBlur, value}) => (
             <TextInput
-              placeholder="Name"
+              placeholder="First Name"
               placeholderTextColor={colorPalette.secondaryDark}
               autoCapitalize="none"
               keyboardType="default"
               underlineColorAndroid={
-                Password.includes(' ') ? 'red' : colorPalette.secondaryDark
+                errors.name ? 'red' : colorPalette.secondaryDark
               }
               style={{
                 marginTop: 12,
@@ -137,6 +147,12 @@ const SignUp2 = ({navigation}) => {
               onBlur={onBlur}
               onChangeText={(value) => onChange(value)}
               value={value}
+              returnKeyType="next"
+              editable={!loading}
+              onSubmitEditing={() => {
+                lastNameRef.current.focus();
+               
+              }}
             />
           )}
           name="name"
@@ -145,6 +161,54 @@ const SignUp2 = ({navigation}) => {
         />
         </View>
         {errors.name &&  <Text
+          style={{
+            fontSize: 13,
+            marginTop: 5,
+
+            marginHorizontal: 22,
+            color: colorPalette.errorColor,
+          }}>
+          This is required.
+        </Text>}
+
+        <View style={{alignItems: 'center'}}>
+        <Controller
+          control={control}
+          render={({onChange, onBlur, value}) => (
+            <TextInput
+              placeholder="Last Name"
+              placeholderTextColor={colorPalette.secondaryDark}
+              autoCapitalize="none"
+              keyboardType="default"
+              underlineColorAndroid={
+                errors.lastName ? 'red' : colorPalette.secondaryDark
+              }
+              style={{
+                marginTop: 12,
+                marginHorizontal: 20,
+                width: width * 0.9,
+
+                color: '#000',
+              }}
+              // style={styles.input}
+              onBlur={onBlur}
+              ref={lastNameRef}
+              onChangeText={(value) => onChange(value)}
+              value={value}
+              returnKeyType="next"
+              editable={!loading}
+              onSubmitEditing={() => {
+                emailRef.current.focus();
+               
+              }}
+            />
+          )}
+          name="lastName"
+          rules={{required: true}}
+          defaultValue=""
+        />
+        </View>
+        {errors.lastName &&  <Text
           style={{
             fontSize: 13,
             marginTop: 5,
@@ -165,7 +229,7 @@ const SignUp2 = ({navigation}) => {
               autoCapitalize="none"
               keyboardType="default"
               underlineColorAndroid={
-                Password.includes(' ') ? 'red' : colorPalette.secondaryDark
+                errors.email? 'red' : colorPalette.secondaryDark
               }
               style={{
                 marginTop: 12,
@@ -178,6 +242,14 @@ const SignUp2 = ({navigation}) => {
               onBlur={onBlur}
               onChangeText={(value) => onChange(value)}
               value={value}
+              ref={emailRef}
+              returnKeyType="next"
+              editable={!loading}
+              onSubmitEditing={() => {
+                passwordRef.current.focus();
+               
+              }}
+
             />
           )}
           name="email"
@@ -207,7 +279,7 @@ const SignUp2 = ({navigation}) => {
               autoCapitalize="none"
               keyboardType="default"
               underlineColorAndroid={
-                Password.includes(' ') ? 'red' : colorPalette.secondaryDark
+                errors.password? 'red' : colorPalette.secondaryDark
               }
               style={{
                 width: width * 0.9,
@@ -218,6 +290,13 @@ const SignUp2 = ({navigation}) => {
               onBlur={onBlur}
               onChangeText={(value) => onChange(value)}
               value={value}
+              ref={passwordRef}
+              returnKeyType="next"
+              editable={!loading}
+              onSubmitEditing={() => {
+                phoneRef.current.focus();
+               
+              }}
             />
           )}
           name="password"
@@ -248,7 +327,7 @@ const SignUp2 = ({navigation}) => {
               autoCapitalize="none"
               keyboardType="default"
               underlineColorAndroid={
-                Password.includes(' ') ? 'red' : colorPalette.secondaryDark
+           errors.phone? 'red' : colorPalette.secondaryDark
               }
               style={{
                 marginTop: 12,
@@ -260,9 +339,14 @@ const SignUp2 = ({navigation}) => {
               // style={styles.input}
               onBlur={onBlur}
               onChangeText={(value) => onChange(value)}
-              
               value={value}
-            
+              ref={phoneRef}
+              returnKeyType="next"
+              editable={!loading}
+
+
+              onSubmitEditing={               
+              handleSubmit(onSubmit)}
             />
           )}
           name="phone"
@@ -281,13 +365,57 @@ const SignUp2 = ({navigation}) => {
           }}>
           This is required.
         </Text>}
-  
+        {/* <View style={{alignItems: 'center'}}>
+
+        <Controller
+          control={control}
+          render={({onChange, onBlur, value}) => (
+            <TextInput
+              placeholder="Activation code"
+              placeholderTextColor={colorPalette.secondaryDark}
+              autoCapitalize="none"
+              keyboardType="default"
+              underlineColorAndroid={
+                Password.includes(' ') ? 'red' : colorPalette.secondaryDark
+              }
+              style={{
+                marginTop: 12,
+                marginHorizontal: 20,
+                width: width * 0.9,
+
+                color: '#000',
+              }}
+              // style={styles.input}
+              onBlur={onBlur}
+              onChangeText={(value) => onChange(value)}
+              value={value}
+              ref={codeRef}
+              editable={!loading}
+              onSubmitEditing={               
+              handleSubmit(onSubmit)}
+            />
+          )}
+          name="ActivationCode"
+          rules={{required: true}}
+          defaultValue=""
+        />
+        </View>
+        {errors.ActivationCode &&  <Text
+          style={{
+            fontSize: 13,
+            marginTop: 5,
+
+            marginHorizontal: 22,
+            color: colorPalette.errorColor,
+          }}>
+          This is required.
+        </Text>} */}
 
       <View style={{alignItems: 'center'}}>
         <TouchableOpacity
           onPress={handleSubmit(onSubmit)}
           style={{
-            marginTop: 50,
+            marginTop: 30,
             backgroundColor: colorPalette.primary,
             borderRadius: 10,
             width: width * 0.8,
@@ -309,7 +437,7 @@ const SignUp2 = ({navigation}) => {
             // textStyle={[listTitleStyle]}
             style={{
               fontSize: 13,
-              marginTop: 28,
+              marginTop: 20,
               color: colorPalette.secondaryDark,
               textAlign: 'right',
             }}>
@@ -323,7 +451,7 @@ const SignUp2 = ({navigation}) => {
             // textStyle={[listTitleStyle]}
             style={{
               fontSize: 13,
-              marginTop: 28,
+              marginTop: 20,
               marginLeft: 5,
               color: colorPalette.primary,
               textAlign: 'right',
@@ -331,23 +459,22 @@ const SignUp2 = ({navigation}) => {
             LOG IN
           </Text>
         </View>
-
-        {Errors ?<View style={{alignItems: 'center',backgroundColor:'white',marginTop:40}}>
+        {Message ?<View style={{alignItems: 'center',backgroundColor:'white',marginTop:30}}>
          <SnackBar
     visible={true}
-     textMessage="Something went wrong"
+     textMessage={Message}
 
     actionHandler={() => {
-      setErrors(null);
+      setMessage(null);
     
       console.log('snackbar button clicked!');
     }}
-    actionText="Try Again"
-    backgroundColor="rgb(216, 208, 208)"
+    // actionText="Try Again"
+    backgroundColor="rgb(216, 208, 208)" 
     containerStyle={{
       borderRadius: 15,
        // marginTop:20,
-      marginHorizontal: width * 0.03,
+      marginHorizontal: width * 0.02,
     }}
     accentColor="#13743A"
     messageColor="#13743A"
@@ -355,7 +482,29 @@ const SignUp2 = ({navigation}) => {
   /> 
   <Text style={{color:'white'}} >sasadsadddddddddddddddddddddddddddddddddddddddddd</Text>
            </View> :null}
+        {Errors ?<View style={{alignItems: 'center',backgroundColor:'white'}}>
+         <SnackBar
+    visible={true}
+     textMessage={Errors}
 
+    actionHandler={() => {
+      setErrors(null);
+    
+      console.log('snackbar button clicked!');
+    }}
+    // actionText="Try Again"
+    backgroundColor="rgb(216, 208, 208)"
+    containerStyle={{
+      borderRadius: 15,
+       // marginTop:20,
+      marginHorizontal: width * 0.02,
+    }}
+    accentColor="#13743A"
+    messageColor="#f00"
+    // height={50}
+  /> 
+  <Text style={{color:'white'}} >sasadsadddddddddddddddddddddddddddddddddddddddddd</Text>
+           </View> :null}
       </View>
     </ScrollView>
   );

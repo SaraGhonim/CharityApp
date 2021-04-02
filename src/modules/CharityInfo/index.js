@@ -6,7 +6,6 @@ import {createDrawerNavigator} from '@react-navigation/drawer';
 import {
   View,
   TextInput,
-  Button,
   Alert,
   StatusBar,
   TouchableOpacity,
@@ -15,16 +14,21 @@ import {
 } from 'react-native';
 import Image from 'react-native-fast-image';
 import pattern from '../../assets/images/logo.png';
-import {Text} from 'react-native-magnus';
+import {Text,Select,Button} from 'react-native-magnus';
 import {useForm, Controller} from 'react-hook-form';
 import {useApp} from '../../globals/state/app';
 import {colorPalette} from '../../utils/theme';
 import {AppText} from '../../AppText';
 import {human, material, systemWeights} from 'react-native-typography';
 import axios from 'axios';
+import RNPickerSelect from 'react-native-picker-select';
+
 const CharityInfo = ({navigation}) => {
   const listTitleStyle = {...material.headlineObject, ...systemWeights.bold};
 
+  const [selectValue, setSelectedValue] = useState([]);
+  const selectRef = React.createRef()
+  
   const [secureTextEntry, setSecureText] = useState(true);
 
   const [loading, setLoading] = useState(false);
@@ -112,7 +116,7 @@ const CharityInfo = ({navigation}) => {
               returnKeyType="next"
               editable={!loading}
               onSubmitEditing={() => {
-                typeRef.current.focus();
+                selectRef.current.open();
               }}
             />
           )}
@@ -134,57 +138,51 @@ const CharityInfo = ({navigation}) => {
         </Text>
       )}
 
-      <View style={{alignItems: 'center'}}>
-        <Controller
-          control={control}
-          render={({onChange, onBlur, value}) => (
-            <TextInput
-              placeholder="Type"
-              placeholderTextColor={colorPalette.secondaryDark}
-              autoCapitalize="none"
-              keyboardType="default"
-              underlineColorAndroid={
-                errors.type ? 'red' : colorPalette.secondaryDark
-              }
-              style={{
-                marginTop: 12,
-                marginHorizontal: 20,
-                width: width * 0.9,
+      <View 
+       style={{borderBottomWidth:1,borderColor:colorPalette.secondaryDark,marginHorizontal:20}}
+      >
+     
+  <Text
+  block
+  my={12}
+  bg="white"
+  color={selectValue.length?  "#000" : colorPalette.secondaryDark }
+  onPress={() => {
+    if (selectRef.current) {
+      selectRef.current.open();
+    }
+  }}>
+  {selectValue.length ? selectValue[0]: 'Type'}
+</Text> 
+      <Select
+  onSelect={(value)=>{
+   setSelectedValue([value.value])  
+   setType(value.key)
+  console.log(`selectValue`, selectValue)
+  console.log(`Type`, Type)
 
-                color: '#000',
-              }}
-              // style={styles.input}
-              onBlur={onBlur}
-              onChangeText={(value) => {onChange(value);
-              setType(value)}
-              }
-              value={value}
-              returnKeyType="next"
-              ref={typeRef}
-              editable={!loading}
-              onSubmitEditing={() => {
-                AddressRef.current.focus();
-              }}
-            />
-          )}
-          name="type"
-          rules={{required: true}}
-          defaultValue=""
-        />
+  AddressRef.current.focus();
+  
+  }
+
+}
+  h={200}
+  ref={selectRef}
+  value={selectValue}
+  title="Who are you ?"
+  mt="md"
+  pb="2xl"
+  // message="Who are you?"
+  roundedTop="2xl"
+  data={[{key :'charity' , value:'Charity'},{key:'charitableTeam',value:'Charitable Team'},{ key:'individual',value:'Individual'}]}
+  renderItem={(item, index) => (
+    <Select.Option value={item} py="md" px="xl">
+      <Text> {item.value}</Text>
+    </Select.Option>
+  )}
+/>
       </View>
-      {errors.type && (
-        <Text
-          style={{
-            fontSize: 13,
-            marginTop: 5,
-
-            marginHorizontal: 22,
-            color: colorPalette.errorColor,
-          }}>
-          This is required.
-        </Text>
-      )}
-
+ 
       <View style={{alignItems: 'center'}}>
         <Controller
           control={control}

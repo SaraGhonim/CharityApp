@@ -34,6 +34,7 @@ const LogIn = ({navigation}) => {
 
   const codeRef = useRef(null);
    const [Errors, setErrors] = useState(null);
+   const [Message, setMessage] = useState(null);
 
   const {width, height} = useWindowDimensions();
   const updateSecureTextEntry = () => {
@@ -43,11 +44,12 @@ const LogIn = ({navigation}) => {
   const {control, handleSubmit, errors} = useForm();
   const onSubmit = (data) => {
     setLoading(true)
+    setMessage(null)
+    setErrors(null)
     console.log('width', width);
     console.log('height', height);
-    // navigation.navigate('Choose')
     axios
-      .post(`https://charityserver-m7q4km3caa-ey.a.run.app/auth/login`, {
+      .post(`https://charity-handlig-app.herokuapp.com/api/auth/login`, {
         email: data.email,
         password: data.password,
       })
@@ -55,22 +57,21 @@ const LogIn = ({navigation}) => {
         console.log('successsssssssssssssssssssssssss')
         console.log('response.data', response.data.refresh_token);
         setLoading(true);
-         setToken1(response.data.refresh_token);
-         setexpiringToken(response.data.token)
+        //  setToken1(response.data.refresh_token);
+        //  setexpiringToken(response.data.token)
+        setMessage(response.data.message)
 
         setLoading(false);
-         navigation.navigate('Home');
+        navigation.navigate('Home');
       })
       .catch((error) => {
         console.log('errorrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrr')
-        console.log(error.response);
+        console.log(error.response.data.error);
         setLoading(false);
-        setErrors(error.response);
+        setErrors(error.response.data.error);
 
         // Handle returned errors here
       });
-    // navigation.navigate('Home');
-    console.log(data.password);
   };
 
 
@@ -267,25 +268,50 @@ const LogIn = ({navigation}) => {
           </Text>
          
         </View>
+        {Message ?
+        <View style={{alignItems: 'center',backgroundColor:'white',marginTop:30}}>
+         <SnackBar
+    visible={true}
+     textMessage={Message}
+
+    actionHandler={() => {
+      setMessage(null);
+    
+      console.log('snackbar button clicked!');
+    }}
+    // actionText="Try Again"
+    backgroundColor="rgb(216, 208, 208)" 
+    containerStyle={{
+      borderRadius: 15,
+       // marginTop:20,
+      marginHorizontal: width * 0.02,
+    }}
+    accentColor="#13743A"
+    messageColor="#13743A"
+    // height={50}
+  /> 
+  <Text style={{color:'white'}} >sasadsadddddddddddddddddddddddddddddddddddddddddd</Text>
+           </View> :null}
+      
        {Errors ?<View style={{alignItems: 'center',backgroundColor:'white',marginTop:40}}>
          <SnackBar
     visible={true}
-     textMessage="Invalid email or password"
+     textMessage={Errors}
 
     actionHandler={() => {
       setErrors(null);
     
       console.log('snackbar button clicked!');
     }}
-    actionText="Try Again"
+    // actionText="Try Again"
     backgroundColor="rgb(216, 208, 208)"
     containerStyle={{
       borderRadius: 15,
        // marginTop:20,
       marginHorizontal: width * 0.03,
     }}
-    accentColor="#13743A"
-    messageColor="#13743A"
+    accentColor="red"
+    messageColor="red"
     // height={50}
   /> 
   <Text style={{color:'white'}} >sasadsadddddddddddddddddddddddddddddddddddddddddd</Text>

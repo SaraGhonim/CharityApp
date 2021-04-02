@@ -33,35 +33,38 @@ const ForgetPassword = ({navigation}) => {
 
   const codeRef = useRef(null);
    const [Errors, setErrors] = useState(null);
+   const [Message, setMessage] = useState(null);
 
   const {width, height} = useWindowDimensions();
 
 
   const {control, handleSubmit, errors} = useForm();
   const onSubmit = (data) => {
-    setLoading(true)
+    setLoading(true)  
+    setMessage(null)
+    setErrors(null)
     console.log('width', width);
     console.log('height', height);
     // navigation.navigate('Choose')
     axios
-      .post(`https://charityserver-m7q4km3caa-ey.a.run.app/auth/resetPassword`, {
+      .post(`https://charity-handlig-app.herokuapp.com/api/auth/resetPassword`, {
         email: data.email,
       })
       .then((response) => {
-        console.log('successsssssssssssssssssssssssss')
-        // console.log('response.data', response.data.refresh_token);
         setLoading(true);
+
+        console.log(response.data.message)
+        setMessage(response.data.message)
+        // console.log('response.data', response.data.refresh_token);
         // setToken1(response.data.refresh_token);
         setLoading(false);
         //  navigation.navigate('Home');
       })
       .catch((error) => {
         console.log('errorrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrr')
-        console.log(error.response);
+        console.log(error.response.data.error);
         setLoading(false);
-         setErrors(error.response);
-
-        // Handle returned errors here
+        setErrors(error.response.data.error);
       });
   };
 
@@ -177,18 +180,17 @@ const ForgetPassword = ({navigation}) => {
           </Text>
         </TouchableOpacity>
       </View> 
-
-      {Errors ?<View style={{alignItems: 'center',backgroundColor:'white',marginTop:40}}>
+      {Message ?<View style={{alignItems: 'center',backgroundColor:'white',marginTop:40}}>
          <SnackBar
     visible={true}
-     textMessage="Error"
+     textMessage={Message}
 
     actionHandler={() => {
-      setErrors(null);
+      setMessage(null);
     
       console.log('snackbar button clicked!');
     }}
-    actionText="Try Again"
+    // actionText="Try Again"
     backgroundColor="rgb(216, 208, 208,.6)" 
     containerStyle={{
       borderRadius: 15,
@@ -197,6 +199,30 @@ const ForgetPassword = ({navigation}) => {
     }}
     accentColor="#13743A"
     messageColor="#13743A"
+    // height={50}
+  /> 
+  <Text style={{color:'white'}} >sasadsadddddddddddddddddddddddddddddddddddddddddd</Text>
+           </View> :null}
+
+      {Errors ?<View style={{alignItems: 'center',backgroundColor:'white',marginTop:40}}>
+         <SnackBar
+    visible={true}
+     textMessage={Errors}
+
+    actionHandler={() => {
+      setErrors(null);
+    
+      console.log('snackbar button clicked!');
+    }}
+    // actionText="Try Again"
+    backgroundColor="rgb(216, 208, 208,.6)" 
+    containerStyle={{
+      borderRadius: 15,
+       // marginTop:20,
+      marginHorizontal: width * 0.03,
+    }}
+    accentColor="#f00"
+    messageColor="#f00"
     // height={50}
   /> 
   <Text style={{color:'white'}} >sasadsadddddddddddddddddddddddddddddddddddddddddd</Text>

@@ -35,9 +35,11 @@ const SignUp = ({navigation}) => {
 
   const passwordRef = useRef(null);
   const phoneRef = useRef(null);
-
   const codeRef = useRef(null);
+
+  const lastNameRef = useRef(null);
    const [Errors, setErrors] = useState(null);
+   const [Message, setMessage] = useState(null);
 
   const {width, height} = useWindowDimensions();
   const updateSecureTextEntry = () => {
@@ -47,32 +49,36 @@ const SignUp = ({navigation}) => {
   const {control, handleSubmit, errors} = useForm();
   const onSubmit = (data) => {
     setLoading(true)
+    setMessage(null)
+    setErrors(null)
     console.log('width', width);
     console.log('height', height);
     // navigation.navigate('Choose')
     axios
-      .post(`https://charityserver-m7q4km3caa-ey.a.run.app/auth/signup`, {
+      .post(`https://charity-handlig-app.herokuapp.com/api/auth/signup`, {
         email: data.email,
         password: data.password,
         firstName: data.name,
-        lastName: '',
+        lastName: data.lastName,
         phoneNumber: data.phone,
-        code: data.ActivationCode,
+        // code: data.ActivationCode,
       })
       .then((response) => {
         console.log('successsssssssssssssssssssssssss')
         console.log('response.data', response.data.refresh_token);
         setLoading(true);
          setToken1(response.data.refresh_token);
+         setMessage(response.data.message)
+
          setexpiringToken(response.data.token)
         setLoading(false);
          navigation.navigate('Home');
       })
       .catch((error) => {
         console.log('errorrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrr')
-        console.log(error.response);
+        console.log(error.response.data);
         setLoading(false);
-         setErrors(error.response.data);
+         setErrors(error.response.data.error);
 
         // Handle returned errors here
       });
@@ -114,12 +120,12 @@ const SignUp = ({navigation}) => {
           control={control}
           render={({onChange, onBlur, value}) => (
             <TextInput
-              placeholder="Name"
+              placeholder="First Name"
               placeholderTextColor={colorPalette.secondaryDark}
               autoCapitalize="none"
               keyboardType="default"
               underlineColorAndroid={
-                Password.includes(' ') ? 'red' : colorPalette.secondaryDark
+                errors.name ? 'red' : colorPalette.secondaryDark
               }
               style={{
                 marginTop: 12,
@@ -135,7 +141,7 @@ const SignUp = ({navigation}) => {
               returnKeyType="next"
               editable={!loading}
               onSubmitEditing={() => {
-                emailRef.current.focus();
+                lastNameRef.current.focus();
                
               }}
             />
@@ -146,6 +152,54 @@ const SignUp = ({navigation}) => {
         />
         </View>
         {errors.name &&  <Text
+          style={{
+            fontSize: 13,
+            marginTop: 5,
+
+            marginHorizontal: 22,
+            color: colorPalette.errorColor,
+          }}>
+          This is required.
+        </Text>}
+
+        <View style={{alignItems: 'center'}}>
+        <Controller
+          control={control}
+          render={({onChange, onBlur, value}) => (
+            <TextInput
+              placeholder="Last Name"
+              placeholderTextColor={colorPalette.secondaryDark}
+              autoCapitalize="none"
+              keyboardType="default"
+              underlineColorAndroid={
+                errors.lastName ? 'red' : colorPalette.secondaryDark
+              }
+              style={{
+                marginTop: 12,
+                marginHorizontal: 20,
+                width: width * 0.9,
+
+                color: '#000',
+              }}
+              // style={styles.input}
+              onBlur={onBlur}
+              ref={lastNameRef}
+              onChangeText={(value) => onChange(value)}
+              value={value}
+              returnKeyType="next"
+              editable={!loading}
+              onSubmitEditing={() => {
+                emailRef.current.focus();
+               
+              }}
+            />
+          )}
+          name="lastName"
+          rules={{required: true}}
+          defaultValue=""
+        />
+        </View>
+        {errors.lastName &&  <Text
           style={{
             fontSize: 13,
             marginTop: 5,
@@ -166,7 +220,7 @@ const SignUp = ({navigation}) => {
               autoCapitalize="none"
               keyboardType="default"
               underlineColorAndroid={
-                Password.includes(' ') ? 'red' : colorPalette.secondaryDark
+                errors.email? 'red' : colorPalette.secondaryDark
               }
               style={{
                 marginTop: 12,
@@ -186,6 +240,7 @@ const SignUp = ({navigation}) => {
                 passwordRef.current.focus();
                
               }}
+
             />
           )}
           name="email"
@@ -215,7 +270,7 @@ const SignUp = ({navigation}) => {
               autoCapitalize="none"
               keyboardType="default"
               underlineColorAndroid={
-                Password.includes(' ') ? 'red' : colorPalette.secondaryDark
+                errors.password? 'red' : colorPalette.secondaryDark
               }
               style={{
                 width: width * 0.9,
@@ -263,7 +318,7 @@ const SignUp = ({navigation}) => {
               autoCapitalize="none"
               keyboardType="default"
               underlineColorAndroid={
-                Password.includes(' ') ? 'red' : colorPalette.secondaryDark
+           errors.phone? 'red' : colorPalette.secondaryDark
               }
               style={{
                 marginTop: 12,
@@ -279,10 +334,10 @@ const SignUp = ({navigation}) => {
               ref={phoneRef}
               returnKeyType="next"
               editable={!loading}
-              onSubmitEditing={() => {
-                codeRef.current.focus();
-               
-              }}
+
+
+              onSubmitEditing={               
+              handleSubmit(onSubmit)}
             />
           )}
           name="phone"
@@ -345,13 +400,13 @@ const SignUp = ({navigation}) => {
             color: colorPalette.errorColor,
           }}>
           This is required.
-        </Text>}
+        </Text>} 
 
       <View style={{alignItems: 'center'}}>
         <TouchableOpacity
           onPress={handleSubmit(onSubmit)}
           style={{
-            marginTop: 50,
+            marginTop: 30,
             backgroundColor: colorPalette.primary,
             borderRadius: 10,
             width: width * 0.8,
@@ -395,23 +450,23 @@ const SignUp = ({navigation}) => {
             LOG IN
           </Text>
         </View>
-
-        {Errors ?<View style={{alignItems: 'center',backgroundColor:'white'}}>
+        {Message ?
+        <View style={{alignItems: 'center',backgroundColor:'white',marginTop:30}}>
          <SnackBar
     visible={true}
-     textMessage="Something went wrong"
+     textMessage={Message}
 
     actionHandler={() => {
-      setErrors(null);
+      setMessage(null);
     
       console.log('snackbar button clicked!');
     }}
-    actionText="Try Again"
-    backgroundColor="rgb(216, 208, 208)"
+    // actionText="Try Again"
+    backgroundColor="rgb(216, 208, 208)" 
     containerStyle={{
       borderRadius: 15,
        // marginTop:20,
-      marginHorizontal: width * 0.03,
+      marginHorizontal: width * 0.02,
     }}
     accentColor="#13743A"
     messageColor="#13743A"
@@ -419,6 +474,31 @@ const SignUp = ({navigation}) => {
   /> 
   <Text style={{color:'white'}} >sasadsadddddddddddddddddddddddddddddddddddddddddd</Text>
            </View> :null}
+      
+        {Errors ?<View style={{alignItems: 'center',backgroundColor:'white'}}>
+         <SnackBar
+    visible={true}
+     textMessage={Errors}
+
+    actionHandler={() => {
+      setErrors(null);
+    
+      console.log('snackbar button clicked!');
+    }}
+    // actionText="Try Again"
+    backgroundColor="rgb(216, 208, 208)"
+    containerStyle={{
+      borderRadius: 15,
+       // marginTop:20,
+      marginHorizontal: width * 0.03,
+    }}
+    accentColor="#13743A"
+    messageColor="#f00"
+    // height={50}
+  /> 
+  <Text style={{color:'white'}} >sasadsadddddddddddddddddddddddddddddddddddddddddd</Text>
+           </View> :null}
+           
       </View>
     </ScrollView>
   );
