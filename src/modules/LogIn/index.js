@@ -55,7 +55,7 @@ const LogIn = ({navigation}) => {
       })
       .then((response) => {
         console.log('successsssssssssssssssssssssssss')
-        console.log('response.data', response.data.refresh_token);
+        // console.log('response.data', response.data.refresh_token);
         setLoading(true);
         //  setToken1(response.data.refresh_token);
         //  setexpiringToken(response.data.token)
