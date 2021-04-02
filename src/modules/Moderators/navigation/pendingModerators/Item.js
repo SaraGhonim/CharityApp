@@ -2,13 +2,11 @@ import React from 'react';
 import { Div, Text, Icon, Avatar, Button } from 'react-native-magnus';
 import { instance } from '../../../../services/api';
 
-const Item = ({ firstname, uid }) => {
+const Item = ({ firstName, uid }) => {
   const handleModeratorRequest = (status) => {
     console.log(`status`, status);
     instance
-      .post(`moderators/${status}`, {
-        uid,
-      })
+      .post(`moderators/requests/${status}/${uid}`)
       .then((res) => {
         console.log(
           `status, res.data at handleModeratorRequest `,
@@ -22,12 +20,12 @@ const Item = ({ firstname, uid }) => {
     {
       name: 'check',
       color: 'secondary',
-      handle: () => handleModeratorRequest('acceptRequest'),
+      handle: () => handleModeratorRequest('accept'),
     },
     {
       name: 'close',
       color: 'alert',
-      handle: () => handleModeratorRequest('rejectRequest'),
+      handle: () => handleModeratorRequest('reject'),
     },
   ];
 
@@ -35,14 +33,14 @@ const Item = ({ firstname, uid }) => {
     <Div bg="white" flex={1} row px="sm" py="md" m="sm" rounded="md">
       <Div flex={1}>
         <Avatar bg="gray3" fontSize="2xl" color="secondary">
-          {firstname.charAt(0).toUpperCase()}
+          {firstName.charAt(0).toUpperCase()}
         </Avatar>
       </Div>
 
       <Div flex={5} ml="lg">
         <Div justifyContent="center">
           <Text fontSize="xl" fontWeight="bold">
-            {firstname}
+            {firstName}
           </Text>
         </Div>
         <Div>

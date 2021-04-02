@@ -25,7 +25,7 @@ export default {
       let token = await getToken();
 
       if (token !== null) {
-        instance.defaults.headers.common['Authorization'] = 'bearer ' + token;
+        instance.defaults.headers.common['Authorization'] = 'Bearer ' + token;
         // console.log('AuthData getToken Driver-Info Res', res);
         setState({
           token: token,
@@ -39,7 +39,7 @@ export default {
     try {
       setToken(JWT)
         .then(() => {
-          instance.defaults.headers.common['Authorization'] = 'bearer ' + JWT;
+          instance.defaults.headers.common['Authorization'] = 'Bearer ' + JWT;
           setState({ token: JWT });
         })
         .catch((e) => {

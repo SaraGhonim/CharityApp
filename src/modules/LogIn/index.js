@@ -57,13 +57,13 @@ const LogIn = ({ navigation }) => {
       })
       .then(async (response) => {
         console.log('successsssssssssssssssssssssssss');
-        console.log('response.data', response.data.refresh_token);
+        console.log('response.data', response.data.data.refresh_token);
         setLoading(true);
         // setToken1(response.data.refresh_token);
         // setexpiringToken(response.data.token)
-        await setTokenObject(response.data);
+        await setTokenObject(response.data.data);
         instance.defaults.headers.common['Authorization'] =
-          'bearer ' + response.data.token;
+          'Bearer ' + response.data.data.token;
         setLoading(false);
         navigation.navigate('Home');
       })

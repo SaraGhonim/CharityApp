@@ -34,9 +34,9 @@ const createAxiosResponseInterceptor = () => {
           refresh_token,
         })
         .then(async (response) => {
-          await setTokenObject(response.data);
+          await setTokenObject(response.data.data);
           error.response.config.headers['Authorization'] =
-            'bearer ' + response.data.token;
+            'Bearer ' + response.data.data.token;
           return instance(error.response.config);
         })
         .catch(async (error) => {

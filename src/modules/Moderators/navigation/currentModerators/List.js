@@ -6,15 +6,21 @@ import Item from './Item';
 const PendingModerators = () => {
   const [refresh, setRefresh] = useState(false);
   const [Data, setData] = useState([]);
+  const [loading, setLoading] = useState(false);
   const loadModerators = () => {
+    setLoading(true);
     instance
-      .get('moderators/getModerators')
+      .get('moderators')
       .then((res) => {
-        setData(res.data);
-        console.log(`res.data getting moderator`, res.data);
+        setData(res.data.data);
         setRefresh(false);
+        setLoading(false);
+        console.log(`res.data.data getting moderator`, res.data.data);
       })
-      .catch((err) => console.log(`err at getModerators`, err));
+      .catch((err) => {
+        setLoading(false);
+        console.log(`err at getModerators`, err);
+      });
   };
   const onRefresh = () => {
     setRefresh(true);
@@ -31,18 +37,28 @@ const PendingModerators = () => {
       </Text>
     </Div>
   );
+  console.log(`Data`, Data);
   return (
     <Div rounded="md" flex={1}>
-      <FlatList
-        data={Data}
-        renderItem={renderItem}
-        keyExtractor={(item, index) => `Moderators-item-${index}`}
-        showsVerticalScrollIndicator={false}
-        ListEmptyComponent={Empty}
-        refreshControl={
-          <RefreshControl refreshing={refresh} onRefresh={onRefresh} />
-        }
-      />
+      {loading ? (
+        <Div justifyContent="center" flex={1} alignItems="center">
+          <Text fontSize="2xl" color="gray4" fontWeight="bold">
+            Loading...
+          </Text>
+        </Div>
+      ) : (
+        <FlatList
+          data={Data}
+          renderItem={renderItem}
+          keyExtractor={(item, index) => `Moderators-item-${index}`}
+          showsVerticalScrollIndicator={false}
+          contentContainerStyle={{ flexGrow: 1 }}
+          ListEmptyComponent={Empty}
+          refreshControl={
+            <RefreshControl refreshing={refresh} onRefresh={onRefresh} />
+          }
+        />
+      )}
     </Div>
   );
 };

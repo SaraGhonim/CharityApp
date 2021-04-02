@@ -4,7 +4,7 @@ import { RectButton } from 'react-native-gesture-handler';
 import { Animated, StyleSheet } from 'react-native';
 import Swipeable from 'react-native-gesture-handler/Swipeable';
 
-const Item = ({ firstname, balance, uid }) => {
+const Item = ({ firstName, balance, uid }) => {
   const [status, setStatus] = useState('Active');
   const StatusColor = status === 'Active' ? 'secondary' : 'gray4';
   const swipeableRef = useRef(null);
@@ -54,11 +54,11 @@ const Item = ({ firstname, balance, uid }) => {
         rounded="md">
         <Div flex={2} row>
           <Avatar bg="gray3" fontSize="2xl" color="secondary">
-            {firstname.charAt(0).toUpperCase()}
+            {firstName.charAt(0).toUpperCase()}
           </Avatar>
           <Div mx="sm">
             <Text fontSize="xl" fontWeight="bold">
-              {firstname}
+              {firstName}
             </Text>
             <Div row>
               <Icon

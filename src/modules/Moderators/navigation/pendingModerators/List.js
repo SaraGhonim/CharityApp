@@ -8,10 +8,10 @@ const PendingModerators = () => {
   const [refresh, setRefresh] = useState(false);
   const loadModeratorRequests = () => {
     instance
-      .get('moderators/getRequests')
+      .get('moderators/requests')
       .then((res) => {
-        setData(res.data);
-        console.log(`res.data loadModeratorRequests`, res.data);
+        setData(res.data.data);
+        console.log(`res.data loadModeratorRequests`, res.data.data);
         setRefresh(false);
       })
       .catch((err) => console.log(`err at loadModeratorRequests`, err));
