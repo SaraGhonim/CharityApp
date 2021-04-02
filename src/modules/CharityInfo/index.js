@@ -1,7 +1,7 @@
-import React, {useState, useRef} from 'react';
-import {NavigationContainer} from '@react-navigation/native';
-import {createStackNavigator} from '@react-navigation/stack';
-import {createDrawerNavigator} from '@react-navigation/drawer';
+import React, { useState, useRef } from 'react';
+import { NavigationContainer } from '@react-navigation/native';
+import { createStackNavigator } from '@react-navigation/stack';
+import { createDrawerNavigator } from '@react-navigation/drawer';
 
 import {
   View,
@@ -14,56 +14,55 @@ import {
 } from 'react-native';
 import Image from 'react-native-fast-image';
 import pattern from '../../assets/images/logo.png';
-import {Text,Select,Button} from 'react-native-magnus';
-import {useForm, Controller} from 'react-hook-form';
-import {useApp} from '../../globals/state/app';
-import {colorPalette} from '../../utils/theme';
-import {AppText} from '../../AppText';
-import {human, material, systemWeights} from 'react-native-typography';
+import { Text, Select, Button } from 'react-native-magnus';
+import { useForm, Controller } from 'react-hook-form';
+import { useApp } from '../../globals/state/app';
+import { colorPalette } from '../../utils/theme';
+import { AppText } from '../../AppText';
+import { human, material, systemWeights } from 'react-native-typography';
 import axios from 'axios';
 import RNPickerSelect from 'react-native-picker-select';
 
-const CharityInfo = ({navigation}) => {
-  const listTitleStyle = {...material.headlineObject, ...systemWeights.bold};
+const CharityInfo = ({ navigation }) => {
+  const listTitleStyle = { ...material.headlineObject, ...systemWeights.bold };
 
   const [selectValue, setSelectedValue] = useState([]);
-  const selectRef = React.createRef()
-  
+  const selectRef = React.createRef();
+
   const [secureTextEntry, setSecureText] = useState(true);
 
   const [loading, setLoading] = useState(false);
 
-
   const typeRef = useRef(null);
   const AddressRef = useRef(null);
   const [
-    {CharityName, Type, Address},
-    {setCharityName, setType, setAddress},
+    { CharityName, Type, Address },
+    { setCharityName, setType, setAddress },
   ] = useApp();
 
   const codeRef = useRef(null);
   // const [errors, setErrors] = useState(null);
 
-  const {width, height} = useWindowDimensions();
+  const { width, height } = useWindowDimensions();
 
-  const {control, handleSubmit, errors} = useForm();
+  const { control, handleSubmit, errors } = useForm();
   const onSubmit = (data) => {
-    console.log(`data.name`, data.name)
-    console.log(`Type`, Type)
+    console.log(`data.name`, data.name);
+    console.log(`Type`, Type);
 
-    console.log(`CharityName`, CharityName)
+    console.log(`CharityName`, CharityName);
     //  setCharityName('data.name');
-    console.log(`Address`, Address)
+    console.log(`Address`, Address);
 
     // setAdress(data.Address);
     // setType(data.type);
-    navigation.navigate('SignUp2')
+    navigation.navigate('SignUp2');
   };
 
   return (
-    <View style={{backgroundColor: 'white', flex: 1}}>
+    <View style={{ backgroundColor: 'white', flex: 1 }}>
       <StatusBar backgroundColor="#fff" barStyle="dark-content" />
-      <View style={{alignItems: 'center'}}>
+      <View style={{ alignItems: 'center' }}>
         <Image
           style={{
             width: width * 0.5,
@@ -89,10 +88,10 @@ const CharityInfo = ({navigation}) => {
         </AppText>
       </View>
 
-      <View style={{alignItems: 'center'}}>
+      <View style={{ alignItems: 'center' }}>
         <Controller
           control={control}
-          render={({onChange, onBlur, value}) => (
+          render={({ onChange, onBlur, value }) => (
             <TextInput
               placeholder="Charity Name"
               placeholderTextColor={colorPalette.secondaryDark}
@@ -110,8 +109,10 @@ const CharityInfo = ({navigation}) => {
               }}
               // style={styles.input}
               onBlur={onBlur}
-              onChangeText={(value) => {onChange(value)
-              setCharityName(value)}}
+              onChangeText={(value) => {
+                onChange(value);
+                setCharityName(value);
+              }}
               value={value}
               returnKeyType="next"
               editable={!loading}
@@ -121,7 +122,7 @@ const CharityInfo = ({navigation}) => {
             />
           )}
           name="name"
-          rules={{required: true}}
+          rules={{ required: true }}
           defaultValue=""
         />
       </View>
@@ -138,55 +139,58 @@ const CharityInfo = ({navigation}) => {
         </Text>
       )}
 
-      <View 
-       style={{borderBottomWidth:1,borderColor:colorPalette.secondaryDark,marginHorizontal:20}}
-      >
-     
-  <Text
-  block
-  my={12}
-  bg="white"
-  color={selectValue.length?  "#000" : colorPalette.secondaryDark }
-  onPress={() => {
-    if (selectRef.current) {
-      selectRef.current.open();
-    }
-  }}>
-  {selectValue.length ? selectValue[0]: 'Type'}
-</Text> 
-      <Select
-  onSelect={(value)=>{
-   setSelectedValue([value.value])  
-   setType(value.key)
-  console.log(`selectValue`, selectValue)
-  console.log(`Type`, Type)
+      <View
+        style={{
+          borderBottomWidth: 1,
+          borderColor: colorPalette.secondaryDark,
+          marginHorizontal: 20,
+        }}>
+        <Text
+          block
+          my={12}
+          bg="white"
+          color={selectValue.length ? '#000' : colorPalette.secondaryDark}
+          onPress={() => {
+            if (selectRef.current) {
+              selectRef.current.open();
+            }
+          }}>
+          {selectValue.length ? selectValue[0] : 'Type'}
+        </Text>
+        <Select
+          onSelect={(value) => {
+            setSelectedValue([value.value]);
+            setType(value.key);
+            console.log(`selectValue`, selectValue);
+            console.log(`Type`, Type);
 
-  AddressRef.current.focus();
-  
-  }
-
-}
-  h={200}
-  ref={selectRef}
-  value={selectValue}
-  title="Who are you ?"
-  mt="md"
-  pb="2xl"
-  // message="Who are you?"
-  roundedTop="2xl"
-  data={[{key :'charity' , value:'Charity'},{key:'charitableTeam',value:'Charitable Team'},{ key:'individual',value:'Individual'}]}
-  renderItem={(item, index) => (
-    <Select.Option value={item} py="md" px="xl">
-      <Text> {item.value}</Text>
-    </Select.Option>
-  )}
-/>
+            AddressRef.current.focus();
+          }}
+          h={200}
+          ref={selectRef}
+          value={selectValue}
+          title="Who are you ?"
+          mt="md"
+          pb="2xl"
+          // message="Who are you?"
+          roundedTop="2xl"
+          data={[
+            { key: 'charity', value: 'Charity' },
+            { key: 'charitableTeam', value: 'Charitable Team' },
+            { key: 'individual', value: 'Individual' },
+          ]}
+          renderItem={(item, index) => (
+            <Select.Option value={item} py="md" px="xl">
+              <Text> {item.value}</Text>
+            </Select.Option>
+          )}
+        />
       </View>
- 
-      <View style={{alignItems: 'center'}}>
+
+      <View style={{ alignItems: 'center' }}>
         <Controller
           control={control}
-          render={({onChange, onBlur, value}) => (
+          render={({ onChange, onBlur, value }) => (
             <TextInput
               placeholder="Address"
               placeholderTextColor={colorPalette.secondaryDark}
@@ -204,8 +208,10 @@ const CharityInfo = ({navigation}) => {
               }}
               // style={styles.input}
               onBlur={onBlur}
-              onChangeText={(value) => {onChange(value);
-              setAddress(value)}}
+              onChangeText={(value) => {
+                onChange(value);
+                setAddress(value);
+              }}
               value={value}
               ref={AddressRef}
               editable={!loading}
@@ -213,7 +219,7 @@ const CharityInfo = ({navigation}) => {
             />
           )}
           name="Address"
-          rules={{required: true}}
+          rules={{ required: true }}
           defaultValue=""
         />
       </View>
@@ -229,7 +235,7 @@ const CharityInfo = ({navigation}) => {
           This is required.
         </Text>
       )}
-      <View style={{alignItems: 'center'}}>
+      <View style={{ alignItems: 'center' }}>
         <TouchableOpacity
           onPress={handleSubmit(onSubmit)}
           style={{

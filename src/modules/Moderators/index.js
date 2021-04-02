@@ -1,5 +1,5 @@
 import React from 'react';
-import {Div, Text, Input, Icon} from 'react-native-magnus';
+import { Div, Text, Input, Icon } from 'react-native-magnus';
 import Moderators from './navigation/index';
 const Index = () => {
   return (

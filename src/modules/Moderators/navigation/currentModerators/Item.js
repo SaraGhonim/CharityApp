@@ -1,12 +1,12 @@
-import React, {useRef, useState} from 'react';
-import {Div, Text, Icon, Avatar} from 'react-native-magnus';
-import {RectButton} from 'react-native-gesture-handler';
-import {Animated, StyleSheet} from 'react-native';
+import React, { useRef, useState } from 'react';
+import { Div, Text, Icon, Avatar } from 'react-native-magnus';
+import { RectButton } from 'react-native-gesture-handler';
+import { Animated, StyleSheet } from 'react-native';
 import Swipeable from 'react-native-gesture-handler/Swipeable';
 
-const Item = ({name, balance}) => {
+const Item = ({ firstName, balance, uid }) => {
   const [status, setStatus] = useState('Active');
-  const StatusColor = status==='Active' ? 'secondary' : 'gray4';
+  const StatusColor = status === 'Active' ? 'secondary' : 'gray4';
   const swipeableRef = useRef(null);
   const onSwipeItem = () => {
     setStatus('Disabled');
@@ -54,11 +54,11 @@ const Item = ({name, balance}) => {
         rounded="md">
         <Div flex={2} row>
           <Avatar bg="gray3" fontSize="2xl" color="secondary">
-            {name.charAt(0).toUpperCase()}
+            {firstName.charAt(0).toUpperCase()}
           </Avatar>
           <Div mx="sm">
             <Text fontSize="xl" fontWeight="bold">
-              {name}
+              {firstName}
             </Text>
             <Div row>
               <Icon

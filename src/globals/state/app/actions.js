@@ -1,51 +1,64 @@
-import {getToken, setToken,removeToken} from '../../../services/token';
+import {
+  getToken,
+  setToken,
+  removeToken,
+  refreshToken,
+} from '../../../services/token';
+import { instance } from '../../../services/api';
 export default {
- 
-  setCharityName: (CharityName) => ({setState, getState}) => {
-    setState({CharityName: CharityName});
+  setCharityName: (CharityName) => ({ setState, getState }) => {
+    setState({ CharityName: CharityName });
   },
-  setType: (Type) => ({setState, getState}) => {
-    setState({Type: Type});
+  setType: (Type) => ({ setState, getState }) => {
+    setState({ Type: Type });
   },
-  setAddress: (Address) => ({setState, getState}) => {
-    setState({Address: Address});
+  setAddress: (Address) => ({ setState, getState }) => {
+    setState({ Address: Address });
   },
 
-  setexpiringToken: (expiringToken) => ({setState, getState}) => {
-    setState({expiringToken: expiringToken});
+  setexpiringToken: (expiringToken) => ({ setState, getState }) => {
+    setState({ expiringToken: expiringToken });
   },
- 
-
-  retrieveToken: () => async ({setState, getState}) => {
+  retrieveToken: () => async ({ setState, getState }) => {
     try {
       //  get current token
       let token = await getToken();
-      setState({token});
-    } catch (err) {
-      console.log('err', err);
-    }
-  },
-  setToken1: (JWT) => async ({setState, getState}) => {
-    try {
-      // const stringToken = JSON.stringify(JWT);
 
-      await setToken(JWT);
-      // setState
-      setState({token: JWT});
+      if (token !== null) {
+        instance.defaults.headers.common['Authorization'] = 'Bearer ' + token;
+        // console.log('AuthData getToken Driver-Info Res', res);
+        setState({
+          token: token,
+        });
+      }
     } catch (err) {
       console.log('err', err);
     }
   },
-  deleteToken: () => async ({setState, getState}) => {
+  setToken1: (JWT) => async ({ setState, getState }) => {
+    try {
+      setToken(JWT)
+        .then(() => {
+          instance.defaults.headers.common['Authorization'] = 'Bearer ' + JWT;
+          setState({ token: JWT });
+        })
+        .catch((e) => {
+          console.log(JWT);
+          console.log('Error on StoreToken', e);
+        });
+      // setState
+    } catch (err) {
+      console.log('err', err);
+    }
+  },
+  deleteToken: () => async ({ setState, getState }) => {
     try {
       //  get current token
-       await removeToken();
-      setState({token:null});
+      await removeToken();
+      setState({ token: null });
     } catch (err) {
       console.log('err', err);
     }
-    console.log('deleted')
+    console.log('deleted');
   },
-  
-  
 };
